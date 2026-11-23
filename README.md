@@ -6,6 +6,8 @@ Status: P0/P1/P2 have scoped evidence; P3 integration and P4 AI comparison are d
 
 ## Run offline
 
+Owner policy, 23 November 2026: all new CI/hosted workflow runs are prohibited. The former workflow is preserved in [the disabled archive](docs/disabled-workflows/README.md), outside the active workflow directory. Previous CI results are historical evidence only. Validation now uses the local commands below; do not restore or dispatch the archived workflow.
+
 Requires Python 3.11 or newer and its standard library; no installation, wallet, account or network calls.
 
 ```sh
