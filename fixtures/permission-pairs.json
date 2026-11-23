@@ -1,0 +1,412 @@
+{
+  "profile": "clinic-synthetic-v1",
+  "provenance": "Newly authored synthetic inputs and manually specified expected reasons; not copied from vendors or private snapshots.",
+  "cases": [
+    {
+      "id": "allowed-minimum",
+      "request": {
+        "request_id": "request-A",
+        "permission_id": "permit-1",
+        "actor": "agent-A",
+        "tool": "synthetic-transfer",
+        "asset": "SYN",
+        "unit": "credit",
+        "destination": "merchant-A",
+        "amount": 1
+      },
+      "expected": "ALLOW"
+    },
+    {
+      "id": "denied-zero",
+      "request": {
+        "request_id": "request-A",
+        "permission_id": "permit-1",
+        "actor": "agent-A",
+        "tool": "synthetic-transfer",
+        "asset": "SYN",
+        "unit": "credit",
+        "destination": "merchant-A",
+        "amount": 0
+      },
+      "expected": "AMOUNT"
+    },
+    {
+      "id": "allowed-request-boundary",
+      "request": {
+        "request_id": "request-A",
+        "permission_id": "permit-1",
+        "actor": "agent-A",
+        "tool": "synthetic-transfer",
+        "asset": "SYN",
+        "unit": "credit",
+        "destination": "merchant-A",
+        "amount": 6
+      },
+      "expected": "ALLOW"
+    },
+    {
+      "id": "denied-request-over",
+      "request": {
+        "request_id": "request-A",
+        "permission_id": "permit-1",
+        "actor": "agent-A",
+        "tool": "synthetic-transfer",
+        "asset": "SYN",
+        "unit": "credit",
+        "destination": "merchant-A",
+        "amount": 7
+      },
+      "expected": "PER_REQUEST"
+    },
+    {
+      "id": "allowed-asset",
+      "request": {
+        "request_id": "request-A",
+        "permission_id": "permit-1",
+        "actor": "agent-A",
+        "tool": "synthetic-transfer",
+        "asset": "SYN",
+        "unit": "credit",
+        "destination": "merchant-A",
+        "amount": 1
+      },
+      "expected": "ALLOW"
+    },
+    {
+      "id": "denied-asset",
+      "request": {
+        "request_id": "request-A",
+        "permission_id": "permit-1",
+        "actor": "agent-A",
+        "tool": "synthetic-transfer",
+        "asset": "OTHER",
+        "unit": "credit",
+        "destination": "merchant-A",
+        "amount": 1
+      },
+      "expected": "ASSET"
+    },
+    {
+      "id": "allowed-destination",
+      "request": {
+        "request_id": "request-A",
+        "permission_id": "permit-1",
+        "actor": "agent-A",
+        "tool": "synthetic-transfer",
+        "asset": "SYN",
+        "unit": "credit",
+        "destination": "merchant-A",
+        "amount": 1
+      },
+      "expected": "ALLOW"
+    },
+    {
+      "id": "denied-destination",
+      "request": {
+        "request_id": "request-A",
+        "permission_id": "permit-1",
+        "actor": "agent-A",
+        "tool": "synthetic-transfer",
+        "asset": "SYN",
+        "unit": "credit",
+        "destination": "attacker",
+        "amount": 1
+      },
+      "expected": "DESTINATION"
+    },
+    {
+      "id": "allowed-before-expiry",
+      "request": {
+        "request_id": "request-A",
+        "permission_id": "permit-1",
+        "actor": "agent-A",
+        "tool": "synthetic-transfer",
+        "asset": "SYN",
+        "unit": "credit",
+        "destination": "merchant-A",
+        "amount": 1
+      },
+      "expected": "ALLOW",
+      "now": 1999
+    },
+    {
+      "id": "denied-at-expiry",
+      "request": {
+        "request_id": "request-A",
+        "permission_id": "permit-1",
+        "actor": "agent-A",
+        "tool": "synthetic-transfer",
+        "asset": "SYN",
+        "unit": "credit",
+        "destination": "merchant-A",
+        "amount": 1
+      },
+      "expected": "EXPIRED",
+      "now": 2000
+    },
+    {
+      "id": "allowed-active",
+      "request": {
+        "request_id": "request-A",
+        "permission_id": "permit-1",
+        "actor": "agent-A",
+        "tool": "synthetic-transfer",
+        "asset": "SYN",
+        "unit": "credit",
+        "destination": "merchant-A",
+        "amount": 1
+      },
+      "expected": "ALLOW",
+      "policy": {
+        "active": true
+      }
+    },
+    {
+      "id": "denied-revoked",
+      "request": {
+        "request_id": "request-A",
+        "permission_id": "permit-1",
+        "actor": "agent-A",
+        "tool": "synthetic-transfer",
+        "asset": "SYN",
+        "unit": "credit",
+        "destination": "merchant-A",
+        "amount": 1
+      },
+      "expected": "REVOKED",
+      "policy": {
+        "active": false
+      }
+    },
+    {
+      "id": "denied-wrong-actor",
+      "request": {
+        "request_id": "request-A",
+        "permission_id": "permit-1",
+        "actor": "agent-B",
+        "tool": "synthetic-transfer",
+        "asset": "SYN",
+        "unit": "credit",
+        "destination": "merchant-A",
+        "amount": 1
+      },
+      "expected": "ACTOR"
+    },
+    {
+      "id": "denied-wrong-tool",
+      "request": {
+        "request_id": "request-A",
+        "permission_id": "permit-1",
+        "actor": "agent-A",
+        "tool": "sign-arbitrary",
+        "asset": "SYN",
+        "unit": "credit",
+        "destination": "merchant-A",
+        "amount": 1
+      },
+      "expected": "TOOL"
+    },
+    {
+      "id": "denied-unit",
+      "request": {
+        "request_id": "request-A",
+        "permission_id": "permit-1",
+        "actor": "agent-A",
+        "tool": "synthetic-transfer",
+        "asset": "SYN",
+        "unit": "milli-credit",
+        "destination": "merchant-A",
+        "amount": 1
+      },
+      "expected": "UNIT"
+    },
+    {
+      "id": "denied-permission",
+      "request": {
+        "request_id": "request-A",
+        "permission_id": "permit-other",
+        "actor": "agent-A",
+        "tool": "synthetic-transfer",
+        "asset": "SYN",
+        "unit": "credit",
+        "destination": "merchant-A",
+        "amount": 1
+      },
+      "expected": "PERMISSION_ID"
+    },
+    {
+      "id": "allowed-total-boundary",
+      "request": {
+        "request_id": "request-A",
+        "permission_id": "permit-1",
+        "actor": "agent-A",
+        "tool": "synthetic-transfer",
+        "asset": "SYN",
+        "unit": "credit",
+        "destination": "merchant-A",
+        "amount": 6
+      },
+      "expected": "ALLOW",
+      "spent": 4
+    },
+    {
+      "id": "denied-open-commitment",
+      "request": {
+        "request_id": "request-A",
+        "permission_id": "permit-1",
+        "actor": "agent-A",
+        "tool": "synthetic-transfer",
+        "asset": "SYN",
+        "unit": "credit",
+        "destination": "merchant-A",
+        "amount": 6
+      },
+      "expected": "QUOTA",
+      "reserved": 6
+    },
+    {
+      "id": "allowed-spent-plus-reserved-boundary",
+      "request": {
+        "request_id": "request-A",
+        "permission_id": "permit-1",
+        "actor": "agent-A",
+        "tool": "synthetic-transfer",
+        "asset": "SYN",
+        "unit": "credit",
+        "destination": "merchant-A",
+        "amount": 2
+      },
+      "expected": "ALLOW",
+      "spent": 4,
+      "reserved": 4
+    },
+    {
+      "id": "denied-spent-plus-reserved-over",
+      "request": {
+        "request_id": "request-A",
+        "permission_id": "permit-1",
+        "actor": "agent-A",
+        "tool": "synthetic-transfer",
+        "asset": "SYN",
+        "unit": "credit",
+        "destination": "merchant-A",
+        "amount": 3
+      },
+      "expected": "QUOTA",
+      "spent": 4,
+      "reserved": 4
+    },
+    {
+      "id": "denied-negative",
+      "request": {
+        "request_id": "request-A",
+        "permission_id": "permit-1",
+        "actor": "agent-A",
+        "tool": "synthetic-transfer",
+        "asset": "SYN",
+        "unit": "credit",
+        "destination": "merchant-A",
+        "amount": -1
+      },
+      "expected": "AMOUNT"
+    },
+    {
+      "id": "denied-float",
+      "request": {
+        "request_id": "request-A",
+        "permission_id": "permit-1",
+        "actor": "agent-A",
+        "tool": "synthetic-transfer",
+        "asset": "SYN",
+        "unit": "credit",
+        "destination": "merchant-A",
+        "amount": 1.0
+      },
+      "expected": "AMOUNT"
+    },
+    {
+      "id": "denied-bool",
+      "request": {
+        "request_id": "request-A",
+        "permission_id": "permit-1",
+        "actor": "agent-A",
+        "tool": "synthetic-transfer",
+        "asset": "SYN",
+        "unit": "credit",
+        "destination": "merchant-A",
+        "amount": true
+      },
+      "expected": "AMOUNT"
+    },
+    {
+      "id": "denied-string",
+      "request": {
+        "request_id": "request-A",
+        "permission_id": "permit-1",
+        "actor": "agent-A",
+        "tool": "synthetic-transfer",
+        "asset": "SYN",
+        "unit": "credit",
+        "destination": "merchant-A",
+        "amount": "1"
+      },
+      "expected": "AMOUNT"
+    },
+    {
+      "id": "denied-overflow",
+      "request": {
+        "request_id": "request-A",
+        "permission_id": "permit-1",
+        "actor": "agent-A",
+        "tool": "synthetic-transfer",
+        "asset": "SYN",
+        "unit": "credit",
+        "destination": "merchant-A",
+        "amount": 9223372036854775808
+      },
+      "expected": "AMOUNT"
+    },
+    {
+      "id": "denied-extra-field",
+      "request": {
+        "request_id": "request-A",
+        "permission_id": "permit-1",
+        "actor": "agent-A",
+        "tool": "synthetic-transfer",
+        "asset": "SYN",
+        "unit": "credit",
+        "destination": "merchant-A",
+        "amount": 1,
+        "authorization": "model-says-yes"
+      },
+      "expected": "SCHEMA"
+    },
+    {
+      "id": "denied-control-character",
+      "request": {
+        "request_id": "request-A",
+        "permission_id": "permit-1",
+        "actor": "agent-A",
+        "tool": "synthetic-transfer",
+        "asset": "SYN",
+        "unit": "credit",
+        "destination": "merchant-A\n",
+        "amount": 1
+      },
+      "expected": "SCHEMA"
+    },
+    {
+      "id": "denied-missing-field",
+      "request": {
+        "request_id": "request-A",
+        "permission_id": "permit-1",
+        "tool": "synthetic-transfer",
+        "asset": "SYN",
+        "unit": "credit",
+        "destination": "merchant-A",
+        "amount": 1
+      },
+      "expected": "SCHEMA"
+    }
+  ]
+}
