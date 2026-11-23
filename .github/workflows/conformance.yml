@@ -5,6 +5,7 @@ permissions:
 jobs:
   offline:
     strategy:
+      fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest]
     runs-on: ${{ matrix.os }}
@@ -34,6 +35,6 @@ jobs:
           name: clinic-${{ matrix.os }}-${{ github.sha }}
           path: local-results/downloaded
       - name: Execute downloaded artifact from isolated mode
-        run: python -I local-results/downloaded/agent-permission-clinic.pyz --output local-results/downloaded-report.json
+        run: python -I local-results/downloaded/dist/agent-permission-clinic.pyz --output local-results/downloaded-report.json
       - name: Verify downloaded report equals source report
         run: python -c "import json,pathlib; a=json.loads(pathlib.Path('local-results/permission-report.json').read_text()); b=json.loads(pathlib.Path('local-results/downloaded-report.json').read_text()); assert a == b"
