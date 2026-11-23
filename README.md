@@ -2,7 +2,20 @@
 
 Replay authorized and denied agent tool calls against an explicit enforcement boundary, including open spending commitments.
 
-Status: P0 scope and documentary baseline complete. Implementation and runtime evidence follow in later phases. This is an educational conformance harness, not a wallet, a security audit, or production protection.
+Status: P0/P1 complete; offline runner and package available. This is an educational conformance harness, not a wallet, a security audit, or production protection.
+
+## Run offline
+
+Requires Python 3.11 or newer and its standard library; no installation, wallet, account or network calls.
+
+```sh
+python -m clinic
+python -m unittest discover -s tests -v
+python tools/build.py
+python -I dist/agent-permission-clinic.pyz
+```
+
+The report lists each case's expected/actual reason and policy revision, plus bypass and false-rejection counts. Exit status 0 means all supplied expectations matched; 1 means a mismatch; 2 means invalid input. Use `--output report.json` or `--corpus custom.json`. Duplicate JSON keys are rejected. The corpus digest covers canonical sorted compact ASCII JSON, independent of file line endings. The initial corpus has 28 manually specified synthetic cases. The runner reports policy decisions; it does not move assets. Build produces an allowlisted deterministic zip application, runnable from a fresh directory without this source tree.
 
 ## One scenario
 

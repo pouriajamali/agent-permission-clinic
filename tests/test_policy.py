@@ -4,7 +4,7 @@ import unittest
 
 from clinic.policy import Policy, decide, digest
 
-CORPUS = Path(__file__).resolve().parents[1] / "fixtures" / "permission-pairs.json"
+CORPUS = Path(__file__).resolve().parents[1] / "clinic" / "corpus.json"
 
 
 class ConformanceTests(unittest.TestCase):
