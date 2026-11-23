@@ -2,7 +2,7 @@
 
 Replay authorized and denied agent tool calls against an explicit enforcement boundary, including open spending commitments.
 
-Status: P0/P1 complete; offline runner and package available. This is an educational conformance harness, not a wallet, a security audit, or production protection.
+Status: P0/P1/P2 have scoped evidence; P3 integration and P4 AI comparison are deferred with explicit gates. Storage reliability has a separate synthetic profile and tests. This is an educational conformance harness, not a wallet, a security audit, or production protection.
 
 ## Run offline
 
@@ -13,6 +13,8 @@ python -m clinic
 python -m unittest discover -s tests -v
 python tools/build.py
 python -I dist/agent-permission-clinic.pyz
+python -I dist/agent-permission-clinic.pyz --storage-demo local-results/demo
+python tools/verify.py --output local-results/tests.json
 ```
 
 The report lists each case's expected/actual reason and policy revision, plus bypass and false-rejection counts. Exit status 0 means all supplied expectations matched; 1 means a mismatch; 2 means invalid input. Use `--output report.json` or `--corpus custom.json`. Duplicate JSON keys are rejected. The corpus digest covers canonical sorted compact ASCII JSON, independent of file line endings. The initial corpus has 28 manually specified synthetic cases. The runner reports policy decisions; it does not move assets. Build produces an allowlisted deterministic zip application, runnable from a fresh directory without this source tree.
@@ -57,9 +59,17 @@ The scoped gap is a reproducible, secret-free local contract test with paired au
 
 ## Phase gates
 
-P0 defines one actor/tool, authority owner, enforcement, rollback/revoke and this bounded gap. P1 adds independent expected results for allowed/denied pairs. P2 delivers an offline runner and fresh-install demo. P3 binds quota and service claims through versioned consumer contracts with CMP-02 (owned externally by G2) and CMP-06 (owned externally by G6). P4 compares model-assisted suggestions with a deterministic baseline using fixed budgets and held-out cases; a negative result or deferred experiment is recorded honestly. P5 tests process concurrency and crash/restart at the storage boundary. P6 requires an externally requested adapter, contract tests, policy migration and review. All gates beyond P0 remain unverified at this revision.
+P0 defines one actor/tool, authority owner, enforcement, rollback/revoke and this bounded gap. P1 adds independent expected results for allowed/denied pairs. P2 delivers an offline runner and fresh-install demo. P3 binds quota and service claims through versioned consumer contracts with CMP-02 (owned externally by G2) and CMP-06 (owned externally by G6). P4 compares model-assisted suggestions with a deterministic baseline using fixed budgets and held-out cases; a negative result or deferred experiment is recorded honestly. P5 tests process concurrency and crash/restart at the storage boundary. P6 requires an externally requested adapter, contract tests, policy migration and review. P0/P1/P2 are verified in their stated scope; P3/P4/P6 retain the gates in the integration document. P5 evidence is limited to the SQLite synthetic profile.
 
-The first adapters are fakes. Shared contracts are fixtures until their owners publish compatible versions. A synthetic local stand-in is not a verified implementation of an upstream shared component. Integration does not require six running services.
+## Storage profile
+
+`sqlite-delete-full-v1` has one permission per database, DELETE rollback journal, `synchronous=FULL`, explicit `BEGIN IMMEDIATE` and a bounded 15-second busy timeout. Reservation totals and the current permission are read and updated inside the writer transaction. A unique request identity and canonical payload digest prevent changed retries. The synthetic receipt and CONSUMED state commit in one transaction. Fences reject old workers; policy revisions are checked again at execution. Trusted operator methods own release, takeover, policy replacement and revoke. None authenticates a user. An external adapter cannot inherit this same-database atomicity.
+
+The process tests synchronize actual spawned workers, exercise over-quota and legitimate exact-quota contention, duplicate identity, execute/revoke contention, stale workers and revision changes. Nine abrupt `os._exit(91)` crash points cover reservation, effect/consume, release and revoke around commit. Reopened databases are checked with independent SQL expectations and integrity checks. This tests process death on the selected filesystem; it does not simulate power loss, broken fsync, disk corruption or every schedule. The sequential `--storage-demo` is explanatory and is not counted as race evidence.
+
+Storage semantics follow [SQLite transaction control](https://www.sqlite.org/lang_transaction.html) and [rollback-mode atomic commit assumptions](https://www.sqlite.org/atomiccommit.html). Changing to WAL, another database, an external wallet or another filesystem needs its own profile and evidence.
+
+The first adapters are fakes. Shared contracts are fixtures until their owners publish compatible versions. A synthetic local stand-in is not a verified implementation of an upstream shared component. Integration does not require six running services. See [current integration and AI gates](docs/integration-gates.md); no unverified gate is implied complete.
 
 ## Publication boundary
 
